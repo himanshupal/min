@@ -261,6 +261,7 @@ func main() {
 
 		link.CreatedBy = user.ID
 		link.Short = RandomString(5)
+		link.FormatTime()
 
 		res, err := getCollection(urlsCollection, w).InsertOne(ctx, link)
 		if err != nil {

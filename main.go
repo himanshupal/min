@@ -280,19 +280,29 @@ func main() {
 	// Direct url redirect
 	r.Get("/{username}/{link}", func(w http.ResponseWriter, r *http.Request) {
 		var link models.Link
+		var user models.User
 
-		if err := getCollection("urls", w).FindOne(ctx, &bson.M{"short": chi.URLParam(r, "link"), "createdBy": bson.M{"username": chi.URLParam(r, "username")}}).Decode(&link); err == mongo.ErrNoDocuments {
+		if err := getCollection(usersCollection, w).FindOne(ctx, &bson.M{"username": chi.URLParam(r, "username")}).Decode(&user); err == mongo.ErrNoDocuments {
 			template.Must(template.ParseFiles(notFoundPage)).Execute(w, bson.M{
 				"Site":    r.Host,
-				"Message": "Not Found!",
+				"Message": "User not found!",
 			})
+			return
+		}
+
+		if err := getCollection(urlsCollection, w).FindOne(ctx, &bson.M{"short": chi.URLParam(r, "link"), "createdBy": user.ID}).Decode(&link); err == mongo.ErrNoDocuments {
+			template.Must(template.ParseFiles(notFoundPage)).Execute(w, bson.M{
+				"Site":    r.Host,
+				"Message": "URL Not Found!",
+			})
+			return
 		}
 
 		if err := client.Disconnect(ctx); err != nil {
 			fmt.Fprintln(w, err)
 		}
 
-		http.Redirect(w, r, link.Url, http.StatusPermanentRedirect)
+		http.Redirect(w, r, link.Url, http.StatusFound)
 	})
 
 	// Start server

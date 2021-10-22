@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Not Found!</title>
+
+    <style type="text/css">
+      @import url("https://fonts.googleapis.com/css2?family=Antic+Slab&family=Bebas+Neue&family=Rampart+One&display=swap");
+
+      :root {
+        --color-dark: #101010;
+        --color-light: #e0e0e0;
+        --color-gray: #c0c0c0;
+        --color-green: #2f2f2f;
+      }
+
+      * {
+        padding: unset;
+        margin: unset;
+        font-family: "Antic Slab", sans-serif;
+      }
+
+      body {
+        color: var(--color-dark);
+        background: var(--color-light);
+      }
+
+      a {
+        color: inherit;
+        background: inherit;
+      }
+
+      .title {
+        color: var(--color-green);
+        text-transform: uppercase;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 256px;
+      }
+
+      .message {
+        color: var(--color-gray);
+        padding: 0 16ch 16ch 0;
+        text-align: right;
+      }
+
+      .footer {
+        border-top: 1px dashed var(--color-gray);
+        background: var(--color-green);
+        padding: 0.75rem 0;
+        margin-top: 1rem;
+        display: flex;
+        bottom: 0;
+        width: 100%;
+        position: fixed;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-light);
+      }
+
+      @media screen and (prefers-color-scheme: dark) {
+        body {
+          color: var(--color-light);
+          background: var(--color-dark);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="main">
+      <h1 class="title">Not Found</h1>
+      <h2 class="message">{{.Message}}</h2>
+    </main>
+    <footer class="footer">
+      <span style="background: inherit">
+        Built using <a href="https://golang.org" target="_blank" style="font-family: 'Rampart One'; text-decoration: none">GO</a> by
+        <a href="https://himanshupal.xyz" target="_blank">@himanshupal</a>
+      </span>
+    </footer>
+  </body>
+
+  <script>
+    if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+    }
+  </script>
+</html>

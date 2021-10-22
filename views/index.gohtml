@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minify</title>
+
+    <style type="text/css">
+      @import url("https://fonts.googleapis.com/css2?family=Antic+Slab&family=Rampart+One&display=swap");
+
+      :root {
+        --color-dark: #101010;
+        --color-light: #e0e0e0;
+        --color-gray: #c0c0c0;
+        --color-green: #2f2f2f;
+        --color-red: #ff4343;
+        --color-yellow: #e8ff1d;
+      }
+
+      * {
+        padding: unset;
+        margin: unset;
+        font-family: "Antic Slab", sans-serif;
+      }
+
+      body {
+        color: var(--color-dark);
+        background: var(--color-light);
+      }
+
+      a {
+        color: inherit;
+        background: inherit;
+      }
+
+      .header {
+        width: 80%;
+        margin: 2.5rem auto;
+      }
+
+      .heading {
+        font-weight: 800;
+      }
+      .heading--title {
+        margin-bottom: 0.5rem;
+      }
+      .heading--subtitle {
+        margin-bottom: 1.5rem;
+      }
+      .heading--main {
+        padding: 0.5rem 1rem;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        border-bottom: 2px solid var(--color-gray);
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        padding: 0 1rem;
+        height: 222px;
+        gap: 1rem;
+      }
+
+      .field {
+        border: var(--color-light);
+        gap: 0.25rem;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .field > .input {
+        color: var(--color-dark);
+        border: unset;
+        padding: 0.5rem;
+        background: var(--color-gray);
+      }
+      .field > .input:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--color-green);
+      }
+      .field > .input--expiry {
+        padding: 0.4rem;
+      }
+      .field > .success {
+        font-size: 18px;
+      }
+      .field > .success > em {
+        color: var(--color-yellow);
+      }
+      .field > .success > small {
+        font-size: 11px;
+      }
+      .field > .error {
+        font-size: 13px;
+        color: var(--color-red);
+      }
+      .field > .info {
+        font-size: 13px;
+        color: var(--color-gray);
+      }
+
+      .button {
+        cursor: pointer;
+        color: var(--color-light);
+        border: 1px dashed var(--color-gray);
+        background: var(--color-green);
+      }
+      .button:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 1px var(--color-gray);
+      }
+      .button--form {
+        padding: 0.5rem 1.5rem;
+      }
+
+      .main {
+        width: 80%;
+        display: flex;
+        margin: 2.5rem auto 4rem;
+      }
+
+      .aside {
+        width: 50%;
+        flex-grow: 1;
+      }
+      .aside--left {
+        text-align: right;
+        justify-content: flex-end;
+      }
+      .aside--left .input {
+        text-align: right;
+      }
+
+      .footer {
+        border-top: 1px dashed var(--color-gray);
+        background: var(--color-green);
+        padding: 0.75rem 0;
+        margin-top: 1rem;
+        display: flex;
+        bottom: 0;
+        width: 100%;
+        position: fixed;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-light);
+      }
+
+      @media screen and (prefers-color-scheme: dark) {
+        body {
+          color: var(--color-light);
+          background: var(--color-dark);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="heading heading--title">{{.Site}}</h1>
+      <h4 class="heading heading--title">Url Shortner</h4>
+    </header>
+    <main class="main">
+      <aside class="aside aside--left">
+        <h1 class="heading heading--main">I am a new user</h1>
+        <form method="post" class="form">
+          <div class="field">
+            <label for="username">Username</label>
+            <input name="username" type="text" class="input" />
+            <label class="error">{{.Error.Username}}</label>
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input name="password" type="password" class="input" />
+            <label class="error">{{.Error.Password}}</label>
+          </div>
+          <button type="submit" class="button button--form">Create Account</button>
+        </form>
+      </aside>
+      <hr />
+      <aside class="aside aside--right">
+        <h1 class="heading heading--main">I have a username</h1>
+        <form method="post" class="form">
+          <div class="field">
+            <label for="existingUser">Username</label>
+            <input name="existingUser" type="text" class="input" />
+            <label class="error">{{.Error.NotFound}}</label>
+          </div>
+          {{if .Success}}
+          <div class="field">
+            <label class="success">
+              <em> Signup Successful; Enter your username above. </em>
+              <small>{{.Success}}</small>
+            </label>
+          </div>
+          {{ end }}
+          <button type="submit" class="button button--form">Get Links</button>
+        </form>
+      </aside>
+    </main>
+    <footer class="footer">
+      <span style="background: inherit">
+        Built using <a href="https://golang.org" target="_blank" style="font-family: 'Rampart One'; text-decoration: none">GO</a> by
+        <a href="https://himanshupal.xyz" target="_blank">@himanshupal</a>
+      </span>
+    </footer>
+  </body>
+
+  <script>
+    if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+    }
+  </script>
+</html>

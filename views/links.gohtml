@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All | Minify</title>
+
+    <style type="text/css">
+      @import url("https://fonts.googleapis.com/css2?family=Antic+Slab&family=Rampart+One&display=swap");
+
+      :root {
+        --color-dark: #101010;
+        --color-light: #e0e0e0;
+        --color-gray: #c0c0c0;
+        --color-green: #2f2f2f;
+        --color-red: #ff4343;
+        --color-yellow: #e8ff1d;
+      }
+
+      * {
+        padding: unset;
+        margin: unset;
+        font-family: "Antic Slab", sans-serif;
+      }
+
+      body {
+        color: var(--color-dark);
+        background: var(--color-light);
+      }
+
+      a {
+        color: inherit;
+        background: inherit;
+      }
+
+      .header {
+        width: 80%;
+        margin: 2.5rem auto;
+      }
+
+      .heading {
+        font-weight: 800;
+      }
+      .heading--title {
+        margin-bottom: 1.5rem;
+      }
+
+      .form {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .field {
+        border: var(--color-light);
+        gap: 0.25rem;
+        display: flex;
+        flex-grow: 1;
+        flex-direction: column;
+        padding: 0.25rem;
+      }
+
+      .field > .input {
+        color: var(--color-dark);
+        border: unset;
+        padding: 0.5rem;
+        background: var(--color-gray);
+      }
+      .field > .input--expiry {
+        padding: 0.4rem;
+      }
+      .field > .error,
+      .field > .message {
+        font-size: 13px;
+      }
+
+      .field > .error {
+        color: var(--color-red);
+      }
+      .field > .message {
+        color: var(--color-yellow);
+      }
+
+      .button {
+        cursor: pointer;
+        color: var(--color-light);
+        border: 1px dashed var(--color-gray);
+        background: var(--color-green);
+      }
+      .button--form {
+        margin-top: 1.6rem;
+        padding: 0.5rem 1.5rem;
+      }
+
+      .main {
+        width: 80%;
+        margin: 2.5rem auto 4rem;
+      }
+
+      .table {
+        width: 100%;
+      }
+      .table tr:nth-child(even) {
+        color: var(--color-light);
+        background: var(--color-green);
+      }
+      .table th {
+        border-bottom: 1px dashed var(--color-gray);
+      }
+      .table th,
+      .table td {
+        padding: 0.5rem;
+        text-align: left;
+      }
+
+      .footer {
+        border-top: 1px dashed var(--color-gray);
+        background: var(--color-green);
+        padding: 0.75rem 0;
+        margin-top: 1rem;
+        display: flex;
+        bottom: 0;
+        width: 100%;
+        position: fixed;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-light);
+      }
+
+      @media screen and (prefers-color-scheme: dark) {
+        body {
+          color: var(--color-light);
+          background: var(--color-dark);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="heading heading--title">
+        {{.Username}}<span style="font-weight: 100">#{{.UserID}}</span>
+      </h1>
+
+      <form action="{{ .Path }}" method="post" class="form">
+        <div class="field">
+          <label for="link">URL</label>
+          <input title="Long webpage url" name="url" class="input input--url" type="url" required />
+          <label class="error">{{ .Error.Url }}</label>
+          {{if .Success}}<label class="message">Saved! [{{.Success}}]</label>{{ end }}
+        </div>
+        <div class="field">
+          <label for="info">Info</label>
+          <input title="Short info about this url" name="info" class="input input--info" type="text" required />
+          <label class="error">{{ .Error.Info }}</label>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input title="Password for username authentication" name="password" class="input input--password" type="password" required />
+          <label class="error">{{ .Error.Password }}</label>
+        </div>
+        <div class="field">
+          <label for="expiry">Auto delete</label>
+          <input title="When should the short link get expired?" name="expiry" class="input input--expiry" type="datetime-local" required />
+          <label class="error">{{ .Error.ExpireAt }}</label>
+        </div>
+        <button class="button button--form" type="submit">Create</button>
+      </form>
+    </header>
+
+    <main class="main">
+      {{ if .List }}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Short URL</th>
+            <th>Complete URL</th>
+            <th>Created at</th>
+            <th>Expiring on</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{
+            range.List
+          }}
+          <tr>
+            <td>{{.Short}}</td>
+            <td>{{.Url}}</td>
+            <td>{{.CreatedAtString}}</td>
+            <td>{{.ExpireAtString}}</td>
+          </tr>
+          {{
+            end
+          }}
+        </tbody>
+      </table>
+      {{ else }}
+      <h1 class="heading heading--title">No data to show.</h1>
+      {{ end }}
+    </main>
+
+    <footer class="footer">
+      <span style="background: inherit">
+        Built with <a href="https://golang.org" target="_blank" style="font-family: 'Rampart One'; text-decoration: none">GO</a> by
+        <a href="https://himanshupal.xyz" target="_blank">@himanshupal</a>
+      </span>
+    </footer>
+  </body>
+
+  <script>
+    if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+    }
+  </script>
+</html>

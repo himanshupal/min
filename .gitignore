@@ -1,4 +1,5 @@
 .env
 *.cmd
-*.exe
 vendor
+
+*.exe*

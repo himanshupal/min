@@ -305,8 +305,13 @@ func main() {
 		http.Redirect(w, r, link.Url, http.StatusFound)
 	})
 
+	var PORT = os.Getenv("PORT")
+	if PORT == "" {
+		PORT = "8090"
+	}
+
 	// Start server
-	if err := http.ListenAndServe(":8090", r); err != nil {
+	if err := http.ListenAndServe(fmt.Sprintf(":%s", PORT), r); err != nil {
 		panic("Error starting server!")
 	}
 }
